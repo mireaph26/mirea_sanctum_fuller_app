@@ -19,7 +19,7 @@ jobs:
           flutter-version: '3.22.0' # use your Flutter version
 
       - name: Install dependencies
-        run: flutter pub get
+        run: PS C:\Users\mjhey\Documents\Default Project\flutter_app>
 
       - name: Build web app
         run: flutter build web --release
@@ -29,3 +29,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build/web
+
