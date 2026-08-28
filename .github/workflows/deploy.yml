@@ -1,9 +1,10 @@
-name: Deploy Flutter web app
+name: Deploy Flutter Web App
 
 on:
   push:
     branches:
-      - main  # or your default branch
+      - main
+      - staging
 
 jobs:
   build:
@@ -13,20 +14,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Flutter
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.0' # use your Flutter version
+          flutter-version: '3.24.0' # adjust to your Flutter version
 
       - name: Install dependencies
-        run: PS C:\Users\mjhey\Documents\Default Project\flutter_app>
+        run: flutter pub get
 
-      - name: Build web app
+      - name: Build Flutter web
         run: flutter build web --release
 
-      - name: Deploy to GitHub Pages
+      # Production deployment (main branch)
+      - name: Deploy to GitHub Pages (production)
+        if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build/web
+
+      # Staging deployment (staging branch)
+      - name: Deploy to GitHub Pages (staging)
+        if: github.ref == 'refs/heads/staging'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/web
+          destination_dir: staging
 
